@@ -199,13 +199,13 @@ export function VideoGridSection({
                           ? ` ${video.quality_score.toFixed(1)} / 5`
                           : ' N/A'}
                       </span>
-                      <span className={styles.videoAuthor}>
+                      <Link className={styles.videoAuthor} href={`/channel/${authorusername ? authorusername : undefined}`}>
                         {authorusername
                           ? `${TEXT.byPrefix} ${authorusername}`
                           : authorId
                           ? TEXT.authorPending
                           : TEXT.authorUnknown}
-                      </span>
+                      </Link>
                     </div>
                     <p className={styles.videoDescription}>
                       {video.description}

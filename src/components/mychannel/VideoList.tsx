@@ -1,7 +1,8 @@
-import React, { FC, memo, useCallback, useState } from 'react';
+import React, { FC, memo, useCallback, useEffect, useState } from 'react';
 import { Video } from '@/types';
 import { parseThemes } from '@/lib/utils';
 import styles from '../../pages/mychannel.module.css';
+import Link from 'next/link';
 
 const TEXT = {
   noVideos: 'No videos',
@@ -12,12 +13,13 @@ const TEXT = {
   refused : 'Refused',
 };
 
+
 interface VideoListProps {
   videos: Video[];
-  onButton1: (video: Video) => void;
-  onButton2: (video: Video) => void;
-  button1Text: string;
-  button2Text: string;
+  onButton1?: (video: Video) => void;
+  onButton2?: (video: Video) => void;
+  button1Text?: string;
+  button2Text?: string;
   
 }
 
@@ -44,19 +46,20 @@ const ThemeTags: FC<{ themes: string[] }> = memo(({ themes }) => {
 
 const ActionButtons: FC<{
   video: Video;
-  onButton1: (v: Video) => void;
-  onButton2: (v: Video) => void;
-  button1Text: string;
-  button2Text: string;
+  onButton1?: (v: Video) => void;
+  onButton2?: (v: Video) => void;
+  button1Text?: string;
+  button2Text?: string;
 }> = ({ video, onButton1: onButton1, onButton2: onButton2, button1Text, button2Text }) => {
-  const handleButton1 = useCallback(() => onButton1(video), [onButton1, video]);
-  const handleButton2 = useCallback(() => onButton2(video), [onButton2, video]);
+  if (typeof(onButton1) ===undefined || typeof(onButton2)===undefined || button1Text==="" || button2Text==="") return
+  const handleButton1 = useCallback(() =>onButton1 ? onButton1(video) : undefined, [onButton1, video]);
+  const handleButton2 = useCallback(() => onButton2 ? onButton2(video) : undefined, [onButton2, video]);
   return (
-    <div className={styles.actions}>
-      <button type="button" onClick={handleButton1}>
+    <div>
+      <button className={styles.videoButtons} onClick={handleButton1}>
         {button1Text}
       </button>
-      <button type="button" onClick={handleButton2}>
+      <button className={styles.videoButtons} onClick={handleButton2}>
         {button2Text}
       </button>
     </div>
@@ -88,9 +91,12 @@ const VideoList: FC<VideoListProps> = ({ videos, onButton1: onButton1, onButton2
   return (
     <div className={styles.mainContent}>
       {videos.map((v) => {
+        
         const themes = safeParseThemes((v as any).themes);
         return (
-          <article key={v.id} className={styles.videoCard} aria-label={`${TEXT.videoLabelPrefix} ${v.title}`}>
+          <div className={styles.videoCard}>
+          <Link href={`/video/${v.id}`}>
+          <article key={v.id} className={styles.videoData} aria-label={`${TEXT.videoLabelPrefix} ${v.title}`}>
             <Thumbnail title={v.title} thumbnail={(v as any).thumbnail ?? null} />
             <div className={styles.videoContent}>
               <header className={styles.videoHeader}>
@@ -110,10 +116,12 @@ const VideoList: FC<VideoListProps> = ({ videos, onButton1: onButton1, onButton2
               <footer className={styles.videoFooter}>
                 
                 <ThemeTags themes={themes} />
-                <ActionButtons video={v} onButton1={onButton1} onButton2={onButton2} button1Text={button1Text} button2Text={button2Text} />
+                <ActionButtons video={v} onButton1={onButton1 ? () => onButton1 : undefined} onButton2={onButton2 ? () => onButton2 : undefined} button1Text={button1Text? button1Text : ""} button2Text={button2Text? button2Text : ""} />
               </footer>
             </div>
           </article>
+          </Link>
+          </div>
         );
       })}
     </div>

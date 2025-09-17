@@ -171,7 +171,7 @@
 }
 
 /* Video Card */
-.videoCard {
+.videoData {
   display: grid;
   grid-template-columns: 340px 1fr;
   gap: 24px;
@@ -181,6 +181,9 @@
   border-radius: 14px;
   padding: 16px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+}
+.videoCard :hover{
+  background-color:var(--color-light-gray)
 }
 
 @media (max-width: 900px) {
@@ -229,7 +232,16 @@
   gap: 8px;
   margin-top: 12px;
 }
-
+.videoButtons{
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #d7d7d7;
+  background: var(--color-light-gray);
+  color: var(--color-dark-gray);
+  cursor: pointer;
+  gap: 8px;
+  margin-left: 9px;
+}
 .tagList {
   display: flex;
   gap: 10px;
@@ -260,6 +272,7 @@
   background: var(--color-light-gray);
   color: var(--color-dark-gray);
   cursor: pointer;
+
 }
 
 .actions button:hover {

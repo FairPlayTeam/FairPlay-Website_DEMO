@@ -7,4 +7,70 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  width: 100%; /* Ensure the container takes up the full width */
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 20px;
+  width: 100%; /* Ensure the container takes up the full width */
+  padding-left: 20px;
+  
+}
+
+.channelHeader {
+  border-bottom: 2px solid var(--color-light-gray);
+  margin-bottom: 20px;
+  width: 100%; /* Ensure the container takes up the full width */
+}
+
+.channelCard {
+  background: var(--color-white);
+  border: 1px solid var(--color-light-gray);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  width: 100%; /* Ensure the container takes up the full width */
+ 
+  
+}
+
+.nameAndAvatar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  width: 100%; /* Ensure the container takes up the full width */
+  margin-left: 20px;
+  
+}
+
+.channelHeader h2 {
+  margin: 0 0 4px 0;
+  font-size: 22px;
+  color: var(--color-dark-gray);
+}
+
+.channelHeader p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-light);
+}
+
+/* Banner */
+.banner {
+  width: 100%; /* Ensure the banner takes up the full width */
+  height: 200px;
+  object-fit: cover; /* Crop the image to cover the container */
+  object-position: center; 
+  border-radius: 12px;
+  border: 1px solid var(--color-light-gray);
+  margin-bottom: 10px;
+  display: block; /* Ensure the banner is treated as a block element */
+}
+
+.loading {
+  text-align: center;
 }

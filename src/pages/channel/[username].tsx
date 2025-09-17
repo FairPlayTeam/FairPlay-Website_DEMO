@@ -11,6 +11,7 @@ import { useToast } from '@/components/ui/Toast/Toast';
 import VideoList from '@/components/mychannel/VideoList';
 import Image from 'next/image'
 
+
 export default function chanelPage() {
     const router = useRouter()
     const { username } = router.query
@@ -20,8 +21,8 @@ export default function chanelPage() {
     const { error: toastError, success: toastSuccess, info: toastInfo } = useToast();
     const [userID, setuserId]=useState<string>("");  
     const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-    const [BannerURL, setBannerURL] = useState<string>("https://placehold.co/1200x250/557CD9/FFFFFF?text=Banner");
-    const [loadingProfile, setLoadingProfile]= useState(false)
+    const [BannerURL, setBannerURL] = useState<string>("");
+    const [loadingProfile, setLoadingProfile]= useState(true)
     const [profile, setProfile] = useState<ProfileData | null>(null);
 
 
@@ -50,13 +51,17 @@ export default function chanelPage() {
     
 
     useEffect(() => {
-      console.log("use effect");
+      setLoadingProfile(true)
       if (!username) return
+      function removeAtSymbolIfPresent(str : any) {
+          return str.startsWith('@') ? str.substring(1) : str;
+      }
+      
         const getUserId = async () => {
           const { data: userData, error: userError } = await supabase
             .from('profiles')
             .select('id')
-            .eq('username', username)
+            .eq('username', removeAtSymbolIfPresent(username))
             
             .single();
 
@@ -80,7 +85,7 @@ useEffect(()=>{
   if (!userID) return
   fetchProfile();
   const fetchVideos = async () => {
-            console.log("username fetche video", username);
+            
             setLoadingVideos(true);
             const userId=userID
         
@@ -110,31 +115,39 @@ useEffect(()=>{
             <Topbar />
             <div className="page-wrapper container">    
                 <Sidebar active="channel"/>
-                <main className="main-content">
-                  <div className={styles.channelHeader}>
-                  <Image
-                    src={avatarPreview || profile?.avatar_url || "/default-avatar.png"}
-                    alt={`${profile?.username} avatar`}
-                    width={140}
-                    height={140}
-                    style={{ borderRadius: '50%' }}
-                    priority
-                  />
-                  <div>
-                    <h2>{profile?.username}</h2>
+                <main className={styles.mainContent}>
+                  {!loadingProfile && (
+                  <div className={styles.channelCard}>
                     
+                    <div className={styles.channelHeader}>
+                    {BannerURL!="" && <img className={styles.banner} src={BannerURL} alt="Channel banner" />}
+                    <div className={styles.nameAndAvatar}>
+                      <Image
+                        src={avatarPreview || profile?.avatar_url || "/default-avatar.jpg"}
+                        alt={`${profile?.username} avatar`}
+                        width={140}
+                        height={140}
+                        style={{ borderRadius: '50%' }}
+                        priority
+                      />
+                      <div>
+                        <h2>{profile?.username}</h2>
+                    </div>
+                    </div>
                   </div>
-                </div>
-                    <h1>Videos</h1>
-                    {loadingVideos ? (  
-                        <p>Loading videos...</p>
-                    ) : error ? (
-                        <p className={styles.error}>Error: {error}</p>
-                    ) : videos.length === 0 ? (
-                        <p>No videos found.</p>
-                    ) : (
-                        <VideoList videos={videos} onButton1={()=>{return}} onButton2={()=>{return}} button1Text='' button2Text=''/>
-                        )}
+                      <h1>Videos</h1>
+                      {loadingVideos ? (  
+                          <p>Loading videos...</p>
+                      ) : error ? (
+                          <p className={styles.error}>Error: {error}</p>
+                      ) : videos.length === 0 ? (
+                          <p>No videos found.</p>
+                      ) : (
+                          <VideoList videos={videos}/>
+                          )}
+                        </div>
+      )}
+      {loadingProfile && <p className={styles.loading}>Loading ...</p>}
                 </main>
             </div>
         </div>
