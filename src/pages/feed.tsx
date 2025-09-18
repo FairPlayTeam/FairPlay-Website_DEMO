@@ -15,6 +15,7 @@ import styles from './feed.module.css';
 
 
 export default function VideosPage() {
+  const browserLanguage: string = navigator.language;
   const router = useRouter();
   const [videos, setVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,7 +33,7 @@ export default function VideosPage() {
       } else {
         const { data, error: fetchError } = await supabase
             .from('videos')
-            .select('id, title, description, type, url, youtube_id, user_id, quality_score, themes, duration, thumbnail, created_at')
+            .select('id, title, description, type, url, youtube_id, user_id, quality_score, themes, duration, thumbnail, created_at, is_verified')
             .order('quality_score', { ascending: false });
             
         if (fetchError) {
@@ -78,10 +79,11 @@ export default function VideosPage() {
     const unique = Array.from(new Set(all));
     return ['All', ...unique];
   }, [videos]);
-
+  const checkfiltered=videos.filter(video => video.is_verified !==false );
   const filteredVideos = selectedCategory === 'All'
-    ? videos
-    : videos.filter(v => parseThemes(v.themes).includes(selectedCategory));
+    ? checkfiltered
+    : checkfiltered.filter(v => parseThemes(v.themes).includes(selectedCategory));
+    
 
   return (
     <>

@@ -159,6 +159,7 @@ export function VideoGridSection({
                 durationDisplay = formatSecondsToReadable(normalized);
               }
             }
+            if (video.is_verified) return
 
             return (
               <Link key={video.id} href={`/video/${video.id}`} legacyBehavior passHref>

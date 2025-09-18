@@ -21,40 +21,42 @@ type ProfileData = {
 
 type Tab = 'stats' | 'videos' | 'customization';
 
-const TEXT = {
-  loadingProfile: 'Loading profile...',
-  unableToLoadProfile: 'Unable to load profile.',
-  myChannelStats: "My Channel Stats",
-  totalViews: 'Total Views',
-  subscribers: 'Subscribers',
-  publishedVideos: 'Published Videos',
-  manageVideos: 'Manage Videos',
-  dropzoneActive: 'Drop your video here...',
-  dropzoneIdle: 'Drag and drop a video or click to select one',
-  noVideos: 'No videos published.',
-  customizeChannel: 'Customize your channel',
-  channelBanner: "Channel Banner (click to change)",
-  edit: 'Edit',
-  profileImage: 'Profile Image',
-  channelName: 'Channel Name',
-  channelHandle: 'Handle (@)',
-  saveChanges: 'Save Changes',
-  saving: 'Saving...',
-  logout: 'Log Out',
+
+const TextFr={
+  loadingProfile: 'Chargement du profil...',
+  unableToLoadProfile: 'Impossible de charger le profil.',
+  myChannelStats: "Statistiques de ma chaîne",
+  totalViews: 'Vues au total',
+  subscribers: 'Abonnés',
+  publishedVideos: 'Vidéos publiées',
+  manageVideos: 'Gérer les vidéos',
+  dropzoneActive: 'Déposez votre vidéo ici...',
+  dropzoneIdle: 'Faites glisser et déposez une vidéo ou cliquez pour en sélectionner une',
+  noVideos: 'Aucune vidéo publiée.',
+  customizeChannel: 'Personnalisez votre chaîne',
+  channelBanner: "Bannière de la chaîne (cliquez pour changer)",
+  edit: 'Modifier',
+  profileImage: 'Photo de Profil',
+  channelName: 'Nom de la Chaîne',
+  channelHandle: 'Identifiant (@)',
+  saveChanges: 'Sauvegarder',
+  saving: 'Enregistrement...',
+  logout: 'Se Déconnecter',
   tabs: {
-    stats: 'Stats',
-    videos: 'Videos',
-    customization: 'Customization',
+    stats: 'Statistiques',
+    videos: 'Vidéos',
+    customization: 'Personnalisation',
   },
   defaultAvatar: '/default-avatar.png',
-  adminpanelbutton: 'Admin Panel',
-  delete: 'Delete',
-  admin : 'Administrator',
-  moderator : 'Moderator',
-  moderationpanelbutton : 'Moderation Panel',
+  adminpanelbutton: "Panneau d'Administration",
+  delete: 'Supprimer',
+  admin : 'Administrateur',
+  moderator : 'Modérateur',
+  moderationpanelbutton : 'Panneau de Modération',
 };
 
 function MyChannelInner() {
+  const browserLanguage: string = navigator.language;
   const router = useRouter();
   const { error: toastError, success: toastSuccess, info: toastInfo } = useToast();
 
@@ -83,7 +85,44 @@ function MyChannelInner() {
   const [is_admin, setIs_admin] = useState(false);
   const [is_moderator, setIs_moderator] = useState(false);
   const [BannerURL, setBannerURL] = useState<string>("https://placehold.co/1200x250/557CD9/FFFFFF?text=Banner");
+  const [TEXT, setTEXT]=useState({
+      loadingProfile: 'Loading profile...',
+      unableToLoadProfile: 'Unable to load profile.',
+      myChannelStats: "My Channel Stats",
+      totalViews: 'Total Views',
+      subscribers: 'Subscribers',
+      publishedVideos: 'Published Videos',
+      manageVideos: 'Manage Videos',
+      dropzoneActive: 'Drop your video here...',
+      dropzoneIdle: 'Drag and drop a video or click to select one',
+      noVideos: 'No videos published.',
+      customizeChannel: 'Customize your channel',
+      channelBanner: "Channel Banner (click to change)",
+      edit: 'Edit',
+      profileImage: 'Profile Image',
+      channelName: 'Channel Name',
+      channelHandle: 'Handle (@)',
+      saveChanges: 'Save Changes',
+      saving: 'Saving...',
+      logout: 'Log Out',
+      tabs: {
+        stats: 'Stats',
+        videos: 'Videos',
+        customization: 'Customization',
+      },
+      defaultAvatar: '/default-avatar.png',
+      adminpanelbutton: 'Admin Panel',
+      delete: 'Delete',
+      admin : 'Administrator',
+      moderator : 'Moderator',
+      moderationpanelbutton : 'Moderation Panel',
+})
 
+
+  const fetchLanguage= useCallback(()=>{
+    console.log("browser language :",browserLanguage)
+    if (browserLanguage==="fr") setTEXT(TextFr)
+  },[])
   // === Utils ===
   const getSessionUser = useCallback(async () => {
     const {
@@ -176,6 +215,7 @@ function MyChannelInner() {
   }, [getSessionUser, toastError]);
 
   useEffect(() => {
+    fetchLanguage();
     fetchProfile();
     fetchVideos();
     fetchExistingThemes();

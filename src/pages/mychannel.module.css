@@ -272,6 +272,7 @@
   background: var(--color-light-gray);
   color: var(--color-dark-gray);
   cursor: pointer;
+  margin-bottom: 10px;
 
 }
 
